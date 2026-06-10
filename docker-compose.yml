@@ -1,0 +1,63 @@
+version: "3.8"
+
+# Requer Docker Compose >= 2.20 (Docker Desktop >= 4.22)
+include:
+  - ./index.db/docker-compose.yml
+
+services:
+
+  # ── Serviço Python: embedding + chunking ──────────────────────────────────
+  index-embedding:
+    build:
+      context: ./index.embedding
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${EMBEDDING_SERVICE_PORT:-5000}:5000"
+    volumes:
+      - ./index.embedding/app.py:/app/app.py:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5000/health || exit 1"]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+
+  # ── Servidor Java Spring Boot (modo dev — recompila ao iniciar) ───────────
+  index-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+      - "${DEBUG_PORT:-5005}:${DEBUG_PORT:-5005}"
+    entrypoint: ["/bin/bash", "/entrypoint.sh"]
+    volumes:
+      # Script de inicialização montado como bind — editável sem rebuild da imagem
+      - ./docker-entrypoint.server.sh:/entrypoint.sh:ro
+      # Código-fonte montado como bind — alterações no host refletem no container
+      - ./index.concept/Index.concept:/workspace/index.concept
+      - ./index.embedding/Index.embedding:/workspace/index.embedding
+      - ./index.repo/Index.repo:/workspace/index.repo
+      - ./index.server/Index.server:/workspace/index.server
+      - ./content-storage:/workspace/content-storage
+      # Cache do repositório Maven — evita re-download de dependências a cada restart
+      - maven-repo:/root/.m2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      INDEX_EMBEDDING_SERVICE_URL: http://index-embedding:5000
+      INDEX_EMBEDDING_MAXEMBEDDINGGENBATCH: ${EMBEDDING_MAX_BATCH:-10}
+      MIN_TOLLERANCE: 0.75
+      DEBUG_PORT: ${DEBUG_PORT:-5005}
+    depends_on:
+      db:
+        condition: service_healthy
+      index-embedding:
+        condition: service_started
+
+volumes:
+  maven-repo:

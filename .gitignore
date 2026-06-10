@@ -1,0 +1,43 @@
+# ── Build ─────────────────────────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# ── Maven wrapper cache ────────────────────────────────────────────────────────
+.mvn/wrapper/maven-wrapper.jar
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+.eclipse/
+.settings/
+.classpath
+.project
+.factorypath
+*.DS_Store
+
+# ── Banco de dados ────────────────────────────────────────────────────────────
+# Volumes do Docker Compose (postgres data dir mapeado localmente)
+index.db/data/
+pgdata/
+*.sql.bak
+
+# ── Content storage ───────────────────────────────────────────────────────────
+# Diretório padrão configurado em index.content.storage.dir
+content-storage/
+/workspace/content-storage/
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Variáveis de ambiente e segredos ──────────────────────────────────────────
+.env
+.env.*
+application-local.properties
+application-secret.properties

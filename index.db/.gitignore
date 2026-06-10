@@ -1,0 +1,5 @@
+# Dados persistidos pelos containers — não versionar
+/data/
+
+# Variáveis de ambiente locais
+.env
