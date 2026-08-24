@@ -41,13 +41,18 @@ public class ContentRepositoryAdapter implements ContentRepositoryPort {
     @Override
     public Content save(Content content) {
         ContentEntity entity = ContentMapper.toEntity(content);
+
         if (entity.getId() == null) {
+            entity.setId(UUID.randomUUID().toString());
+            entity.setStorageId(entity.getStorageId());
+            /*
             entity = ContentEntity.builder()
                     .id(UUID.randomUUID().toString())
                     .storageId(entity.getStorageId())
                     .name(entity.getName())
                     .description(entity.getDescription())
                     .build();
+             */
         }
         return ContentMapper.toDomain(contentRepo.save(entity));
     }

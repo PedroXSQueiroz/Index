@@ -1,5 +1,6 @@
 package br.com.pedroxsqueiroz.Index.server.dtos;
 
+import br.com.pedroxsqueiroz.Index.concept.constants.ContentType;
 import br.com.pedroxsqueiroz.Index.concept.models.Content;
 import br.com.pedroxsqueiroz.Index.concept.models.ContentChunck;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,7 @@ public class ContentDto {
                 .name(this.name)
                 .description(this.description)
                 .author(this.author)
-                .type(this.type)
+                .type(ContentType.valueOf(this.type))
                 .uploadDate(this.uploadDate)
                 .build();
     }
@@ -53,7 +54,7 @@ public class ContentDto {
         this.id = content.getId();
         this.name = content.getName();
         this.description = content.getDescription();
-        this.type = content.getType();
+        this.type = content.getType().toString();
         this.author = content.getAuthor();
         this.uploadDate = content.getUploadDate();
         this.chuncks = null;

@@ -1,5 +1,6 @@
 package br.com.pedroxsqueiroz.Index.concept.services;
 
+import br.com.pedroxsqueiroz.Index.concept.constants.ContentType;
 import br.com.pedroxsqueiroz.Index.concept.exceptions.InconsistentContentRequestException;
 import br.com.pedroxsqueiroz.Index.concept.models.Concept;
 import br.com.pedroxsqueiroz.Index.concept.models.Content;
@@ -45,7 +46,7 @@ public class ContentService {
 
     }
 
-    public Content saveContent(List<String> pages, String name, String description)
+    public Content saveContent(List<String> pages, String name, String description, String author, ContentType type)
     {
         //List<ContentChunck> chuncks = new ArrayList<>();
         UUID storageId = UUID.randomUUID();
@@ -54,6 +55,9 @@ public class ContentService {
                         .name(name)
                         .description(description)
                         .storageId(storageId.toString())
+                        .author(author)
+                        .type(type)
+                        .uploadDate(new Date())
                         .build()
         );
 
@@ -133,17 +137,24 @@ public class ContentService {
             currentChunckSet = contentRepository.findContentChunckOfContent(content, offset, maxChuncksBatch);
 
             for (ContentChunck currentChunck : currentChunckSet) {
-                Embedding currentEmbedding = this.embedding.generateEmbedding(currentChunck.toString());
-                currentChunck.setEmbedding(currentEmbedding);
-                contentRepository.saveChunck(currentChunck);
 
-                //TODO: THE RELATIONSHIP WITH CONCEPT SHOULD BE MADE HERE?
-                List<Concept> correspondingConcepts = conceptService.findConcepts(currentEmbedding);
+                try {
+                    //FIXME: THIS EXCEPTION SHOULD BE ON THE SIGNATURE?
+                    Embedding currentEmbedding = this.embedding.generateEmbedding(getChunckContent(List.of( currentChunck )));
+                    currentChunck.setEmbedding(currentEmbedding);
+                    contentRepository.saveChunck(currentChunck);
 
-                correspondingConcepts.forEach(concept -> {
-                    concept.getChuncks().add(currentChunck);
-                    conceptService.update(concept);
-                });
+                    //TODO: THE RELATIONSHIP WITH CONCEPT SHOULD BE MADE HERE?
+                    List<Concept> correspondingConcepts = conceptService.findConcepts(currentEmbedding);
+
+                    correspondingConcepts.forEach(concept -> {
+                        concept.getChuncks().add(currentChunck);
+                        conceptService.update(concept);
+                    });
+                } catch (InconsistentContentRequestException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
 
             offset += maxChuncksBatch;

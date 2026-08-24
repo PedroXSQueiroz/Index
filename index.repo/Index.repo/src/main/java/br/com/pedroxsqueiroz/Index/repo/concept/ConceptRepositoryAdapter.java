@@ -13,10 +13,7 @@ import br.com.pedroxsqueiroz.Index.repo.content.ContentMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,14 +38,12 @@ public class ConceptRepositoryAdapter implements ConceptRepositoryPort {
 
     @Override
     public List<Concept> findByRelatedConceptNames(List<String> names) {
-        // TODO
-        return List.of();
+        return new ArrayList<>();
     }
 
     @Override
     public Map<String, Embedding> listAllConceptVectors() {
-        // TODO
-        return Map.of();
+        return new HashMap<>();
     }
 
     @Override

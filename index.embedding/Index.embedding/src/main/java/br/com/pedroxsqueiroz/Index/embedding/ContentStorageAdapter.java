@@ -41,11 +41,11 @@ public class ContentStorageAdapter implements ContentStoragePort {
     }
 
     @Override
-    public String getContent(String storageId, int page, int offset, int limit) {
+    public String getContent(String storageId, int page, int offset, int end) {
         try {
             String fileName = String.format("%s__%d", storageId, page);
             String fullContent = Files.readString(storageDir.resolve(fileName));
-            int safeEnd = Math.min(offset + limit, fullContent.length());
+            int safeEnd = Math.min(end, fullContent.length());
             return fullContent.substring(offset, safeEnd);
         } catch (IOException e) {
             throw new UncheckedIOException("Falha ao ler conteúdo com storageId " + storageId, e);

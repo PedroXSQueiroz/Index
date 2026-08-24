@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,12 @@ public class ContentEntity {
     private String name;
 
     private String description;
+
+    private String author;
+
+    private String type;
+
+    private Date uploadDate;
 
     @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ContentChunckEntity> chunks;

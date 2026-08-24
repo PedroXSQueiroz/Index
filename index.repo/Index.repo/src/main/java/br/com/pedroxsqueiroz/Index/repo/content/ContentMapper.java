@@ -1,5 +1,6 @@
 package br.com.pedroxsqueiroz.Index.repo.content;
 
+import br.com.pedroxsqueiroz.Index.concept.constants.ContentType;
 import br.com.pedroxsqueiroz.Index.concept.models.Content;
 import br.com.pedroxsqueiroz.Index.concept.models.ContentChunck;
 import br.com.pedroxsqueiroz.Index.repo.concept.ConceptMapper;
@@ -15,6 +16,9 @@ public class ContentMapper {
                 .storageId(entity.getStorageId())
                 .name(entity.getName())
                 .description(entity.getDescription())
+                .author(entity.getAuthor())
+                .uploadDate(entity.getUploadDate())
+                .type(ContentType.valueOf(entity.getType()))
                 .build();
     }
 
@@ -24,6 +28,9 @@ public class ContentMapper {
                 .storageId(content.getStorageId())
                 .name(content.getName())
                 .description(content.getDescription())
+                .author(content.getAuthor())
+                .type(content.getType().toString())
+                .uploadDate(content.getUploadDate())
                 .build();
     }
 

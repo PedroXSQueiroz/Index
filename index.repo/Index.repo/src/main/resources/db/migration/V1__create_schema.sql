@@ -11,6 +11,9 @@ CREATE TABLE contents (
     id          VARCHAR(36)  NOT NULL,
     storage_id  VARCHAR(255) NOT NULL,
     name        VARCHAR(255),
+    author      VARCHAR(255),
+    type        VARCHAR(20),
+    upload_date TIMESTAMP NOT NULL,
     description TEXT,
 
     CONSTRAINT pk_contents PRIMARY KEY (id)

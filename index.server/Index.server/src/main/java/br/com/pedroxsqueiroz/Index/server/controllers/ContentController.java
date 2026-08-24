@@ -1,5 +1,6 @@
 package br.com.pedroxsqueiroz.Index.server.controllers;
 
+import br.com.pedroxsqueiroz.Index.concept.constants.ContentType;
 import br.com.pedroxsqueiroz.Index.concept.exceptions.InconsistentContentRequestException;
 import br.com.pedroxsqueiroz.Index.concept.models.Concept;
 import br.com.pedroxsqueiroz.Index.concept.models.Content;
@@ -32,10 +33,14 @@ public class ContentController {
     @ResponseBody
     ResponseEntity<?> savePlainText(@RequestBody PlainTextContentDto content)
     {
+        //FIXME: VALIDATE IF TYPE IS VALID
+
         Content savedContent = contentService.saveContent(
                 List.of(content.getContent()),
                 content.getName(),
-                content.getDescription()
+                content.getDescription(),
+                content.getAuthor(),
+                ContentType.valueOf(content.getType())
         );
 
         List<ContentChunck> chuncks = contentService.getContentChunck(savedContent, 0 , 1);

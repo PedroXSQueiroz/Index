@@ -1,5 +1,6 @@
 package br.com.pedroxsqueiroz.Index.concept.models;
 
+import br.com.pedroxsqueiroz.Index.concept.constants.ContentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class Content {
     private String name;
     private String description;
     private String author;
-    private String type;
+    private ContentType type;
     private String storage;
     int pagesCount;
     private Date uploadDate;
