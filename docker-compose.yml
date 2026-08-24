@@ -59,5 +59,16 @@ services:
       index-embedding:
         condition: service_started
 
+  index-web-client:
+    image: node:24-alpine
+    volumes:
+      - ./index.web_cli:/index_web_client
+    working_dir: /index_web_client
+    environment:
+      - NODE_OPTIONS="--conditions=development"
+    ports:
+      - 5173:5173
+    entrypoint: npm run dev
+
 volumes:
   maven-repo:

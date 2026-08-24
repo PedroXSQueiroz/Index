@@ -1,0 +1,282 @@
+/* ==========================================================================
+   Index — estilos base extraídos do esboço "Design de biblioteca minimalista"
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Lora:wght@400;600&display=swap');
+
+:root {
+  /* — cores — */
+  --color-bg: #f3f2f2;
+  --color-surface: #eae9e9;
+  --color-text: #201f1d;
+  --color-accent: #b68235;
+  --color-accent-700: #7d5411;
+  --color-border: color-mix(in srgb, var(--color-text) 11%, transparent);
+  --color-divider: color-mix(in srgb, var(--color-text) 13%, transparent);
+  --color-text-60: color-mix(in srgb, var(--color-text) 66%, transparent);
+  --color-text-40: color-mix(in srgb, var(--color-text) 40%, transparent);
+
+  /* — marca-texto decorativo — */
+  --marker-1: #efe2c6;
+  --marker-2: #dee7e0;
+  --marker-3: #e8dde4;
+  --marker-4: #dde3ec;
+  --marker-5: #f0e0da;
+
+  /* — tipografia — */
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Lora', Georgia, serif;
+
+  /* — raio — */
+  --radius-sm: 1px;
+  --radius-md: 3px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+a {
+  color: var(--color-accent-700);
+  text-decoration: none;
+}
+
+a:hover {
+  color: #6d4e1f;
+}
+
+textarea::placeholder,
+input::placeholder {
+  color: color-mix(in srgb, var(--color-text) 32%, transparent);
+  font-style: italic;
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+/* ==========================================================================
+   Marcador decorativo — o "grifo" atrás de títulos e nomes de conceito
+   ========================================================================== */
+
+.with-marker {
+  position: relative;
+  display: inline-block;
+  padding: 0 3px;
+  z-index: 0;
+
+  --marker-color: var(--marker-1);
+  --marker-rotate: -2deg;
+  --marker-skew: -9deg;
+  --marker-width: 0.7em;
+  --marker-height: 0.32em;
+}
+
+.with-marker::before {
+  content: '';
+  position: absolute;
+  right: -5px;
+  bottom: 0.12em;
+  width: var(--marker-width);
+  height: var(--marker-height);
+  background: var(--marker-color);
+  border-radius: 1px 2px 1px 0;
+  transform: rotate(var(--marker-rotate)) skewX(var(--marker-skew));
+  opacity: 0.95;
+  z-index: -1;
+}
+
+/* variações de tom e inclinação, para a lista não ficar mecânica */
+.marker-tint-1 { --marker-color: var(--marker-1); --marker-rotate: -2.4deg; --marker-skew: -9deg; }
+.marker-tint-2 { --marker-color: var(--marker-2); --marker-rotate: -1.2deg; --marker-skew: -6deg; }
+.marker-tint-3 { --marker-color: var(--marker-3); --marker-rotate: -3deg;   --marker-skew: -11deg; }
+.marker-tint-4 { --marker-color: var(--marker-4); --marker-rotate: -1.7deg; --marker-skew: -7deg; }
+.marker-tint-5 { --marker-color: var(--marker-5); --marker-rotate: -2.1deg; --marker-skew: -8deg; }
+
+/* ==========================================================================
+   Marca
+   ========================================================================== */
+
+.brand {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 76px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0 0 44px;
+}
+
+.brand-sm {
+  font-size: 34px;
+  margin: 0;
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+}
+
+/* ==========================================================================
+   Tela de entrada — caixa de texto do conteúdo
+   ========================================================================== */
+
+.page-start {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 40px;
+}
+
+.file-note {
+  margin: 18px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: var(--color-text-40);
+}
+
+/* ==========================================================================
+   Tela de resultado — texto à esquerda, conceitos à direita
+   ========================================================================== */
+
+.page-result {
+  min-height: 100vh;
+  padding: 40px 44px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.result-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: start;
+  flex: 1;
+}
+
+.passage {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 30px 32px;
+  min-height: 60vh;
+}
+
+.passage-text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.95;
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+/* trecho grifado dentro da passagem; o tom vem de .marker-tint-* */
+.highlight {
+  background: var(--marker-color, var(--marker-1));
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Caixa de pesquisa
+   ========================================================================== */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.search-box-icon {
+  flex: none;
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+.search-box-input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+}
+
+.search-box-count {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--color-text) 38%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Conceitos
+   ========================================================================== */
+
+.concept-list {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.concept {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.concept .concept-name {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 1.15;
+  margin: 0;
+  align-self: flex-start;
+}
+
+/* filete que separa o nome da descrição (largura total da coluna) */
+.concept .concept-rule {
+  height: 1px;
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.concept .concept-description {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--color-text-60);
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+.concept .concept-links {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--color-text-40);
+}

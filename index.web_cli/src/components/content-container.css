@@ -1,0 +1,65 @@
+.content-input-box {
+  width: min(720px, 100%);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  min-height: 134px;
+}
+
+.content-input {
+  border: 0;
+  background: transparent;
+  resize: none;
+  min-height: 268px;
+  padding: 26px 28px 8px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--color-text);
+  caret-color: var(--color-accent);
+}
+
+.content-input-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px 16px 24px;
+}
+
+.attach-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, var(--color-text) 58%, transparent);
+  cursor: pointer;
+}
+
+.attach-label:hover {
+  color: var(--color-accent-700);
+}
+
+.attach-label input[type='file'] {
+  display: none;
+}
+
+.btn-index {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 8px 20px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-accent-700);
+  cursor: pointer;
+}
+
+.btn-index:hover {
+  background: color-mix(in srgb, var(--color-accent) 9%, transparent);
+}
