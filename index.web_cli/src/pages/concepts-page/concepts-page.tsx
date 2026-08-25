@@ -7,6 +7,7 @@ import ContentContainer from "../../components/content-container";
 import type ContentChunckDto from "../../dtos/content-chunck-dto";
 
 import './concepts-page.css';
+import ConceptResume from "../../components/concept-resume";
 
 export default function ConceptsPage(){
 
@@ -53,7 +54,7 @@ export default function ConceptsPage(){
         return concepts[0].chuncks[0].content.id;
     }
 
-    //FIMXE: PROVISORY LOGIC TO GET ALL CONCEPTS
+    //FIXME: PROVISORY LOGIC TO GET ALL CONCEPTS
     //MAYBE USE GRAPHQL?    
     if(contentIds){
         
@@ -79,8 +80,8 @@ export default function ConceptsPage(){
                 <div className="contents-panel">
                     <ContentContainer waitingInput={false} chuncksOfContent={chuncksOfCurrentContent} />
                 </div>
-                <div>
-                    <h1>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</h1>
+                <div className="concepts-panel">
+                    {conceptsState.map(con => <ConceptResume concept={con} />)}
                 </div>
             </div>
         ): ( <h2>Loading</h2> );

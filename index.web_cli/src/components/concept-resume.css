@@ -1,0 +1,36 @@
+.concept {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.concept .concept-name {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 1.15;
+  margin: 0;
+  align-self: flex-start;
+}
+
+/* filete que separa o nome da descrição (largura total da coluna) */
+.concept .concept-rule {
+  height: 1px;
+  background: color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.concept .concept-description {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--color-text-60);
+  text-align: justify;
+  text-wrap: pretty;
+}
+
+.concept .concept-links {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--color-text-40);
+}
