@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router'
 import './App.css'
 
 import ContentSubPage from './pages/content-sub-page/content-sub-page'
+import ConceptsPage from './pages/concepts-page/concepts-page'
 
 function App() {
   
@@ -16,10 +17,11 @@ function App() {
   }
   
   return (
-    <div className="page-start">
+    <div className="main-container">
       {logo()}
       <Routes>
         <Route path="/" element={<ContentSubPage />} />
+        <Route path="/concepts" element={<ConceptsPage />} />
       </Routes>
 
     </div>

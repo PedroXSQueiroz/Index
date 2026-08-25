@@ -1,0 +1,12 @@
+.concepts-page{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    gap:44px;
+}
+.contents-panel{
+    height: 100%;
+    width: 100%;
+}

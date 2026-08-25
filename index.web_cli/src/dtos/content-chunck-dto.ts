@@ -1,19 +1,25 @@
+import type ContentDto from "./content-dto";
+
 export default class ContentChunckDto{
     
     constructor(
         id: string,
         start: number,
         end: number,
-        content: string
+        chunckContent: string,
+        content: ContentDto
+
     ){
         this.id = id;
         this.start = start;
         this.end = end;
+        this.chunckContent = chunckContent;
         this.content = content;
     }
 
     id: string;
     start: number;
     end: number;
-    content: string;
+    chunckContent: string;    
+    content: ContentDto;
 }

@@ -1,5 +1,9 @@
 import ContentContainer from '../../components/content-container'
 
 export default function ContentSubPage(){
-    return <ContentContainer waitingInput={true}/>
+    return (
+        <div style={{width:'720px'}}>
+            <ContentContainer waitingInput={true}/>
+        </div>
+    );
 };

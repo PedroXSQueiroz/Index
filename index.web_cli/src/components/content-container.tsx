@@ -1,25 +1,31 @@
-import './content-container.css'
+import React from 'react';
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from "react-router";
+
 import ContentService from '../services/content-service';
 import ConceptDto from '../dtos/concept-dto';
-import React from 'react';
+
+import './content-container.css'
 
 export default function ContentContainer(props){
     
-    let textAreaContentRef = React.createRef();
+    let textAreaContentRef  = React.createRef();
+    const navigate          = useNavigate();
+    const queryParams       = useSearchParams();
     
     let submitContentPlainText = async () => {
         let contentService:ContentService = new ContentService();
         let contentId = await contentService.submitPlainText(textAreaContentRef.current.value);
         await contentService.processEmbeddingsOfContent(contentId);
-        let concepts:ConceptDto[] = await contentService.generateConceptsOfContent(contentId);
+        contentService.generateConceptsOfContent(contentId);
+        
 
-        debugger;
+        navigate(`/concepts?content=${contentId}`);
     }
     
-
     return (
     <div className="content-input-box">
-        {props.waitingInput && 
+        {props.waitingInput ? 
         <>
             <textarea
             ref={textAreaContentRef}
@@ -46,7 +52,11 @@ export default function ContentContainer(props){
             </label>
             <button className="btn-index" onClick={() => submitContentPlainText()}>Indexar</button>
             </div>
-        </>}
+        </> : props.chuncksOfContent && !props.waitingInput && 
+            <div className="content-input">
+                {props.chuncksOfContent.map( chunck => <span>{chunck.chunckContent}</span> )}
+            </div>
+        }
       </div>
       );
 };

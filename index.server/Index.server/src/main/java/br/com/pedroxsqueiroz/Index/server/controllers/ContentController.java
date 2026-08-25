@@ -79,7 +79,13 @@ public class ContentController {
                     .filter(chunck -> chunck.getPage() == 0)
                     .map( chunck-> {
                         try {
-                            return new ContentChunckDto(chunck, contentService.getChunckContent(List.of( chunck )));
+
+                            return new ContentChunckDto(
+                                    chunck,
+                                    contentService.getChunckContent(List.of( chunck )),
+                                    new ContentDto( chunck.getContent() )
+                            );
+
                         } catch (InconsistentContentRequestException e) {
                             throw new RuntimeException(e);
                         }
