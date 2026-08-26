@@ -25,7 +25,7 @@ public class ConceptController {
     @GetMapping(value = "/")
     @ResponseBody
     public ResponseEntity<?> list(
-            @RequestParam("ofsset") Integer offset,
+            @RequestParam("offset") Integer offset,
             @RequestParam("limit") Integer limit,
             @RequestParam(value = "content", required = false) String contentId
         )

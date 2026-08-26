@@ -127,8 +127,23 @@ public class ContentController {
         return ResponseEntity.ok(
             ContentPageDto.builder()
             .content(pageContent)
-            .chuncks( pageChuncks.stream().map( ContentChunckDto::new ).toList() )
-            .build()
+            .chuncks( pageChuncks.stream()
+                    .map( chunck -> {
+
+                        ContentChunckDto chunckDto = new ContentChunckDto(chunck);
+
+                        //FIXME: SHOULD NOT BE POSSIBLE RETURN THE LIST OF COULD NOT OBTAIN THE CONTENT OF THE CHUNCK
+                        try {
+                            String chunckContent = contentService.getChunckContent(List.of(chunck));
+                            chunckDto.setChunckContent(chunckContent);
+                        } catch (InconsistentContentRequestException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        return chunckDto;
+                    })
+                    .toList()
+            ).build()
         );
     }
 }

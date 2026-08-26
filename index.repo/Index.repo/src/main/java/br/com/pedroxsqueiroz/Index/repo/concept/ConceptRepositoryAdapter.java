@@ -8,6 +8,7 @@ import br.com.pedroxsqueiroz.Index.concept.models.Embedding;
 import br.com.pedroxsqueiroz.Index.concept.ports.repo.ConceptRepositoryPort;
 import br.com.pedroxsqueiroz.Index.repo.concept.entity.ConceptEntity;
 import br.com.pedroxsqueiroz.Index.repo.concept.entity.ConceptRelationEntity;
+import br.com.pedroxsqueiroz.Index.repo.content.ContentChunckJpaRepository;
 import br.com.pedroxsqueiroz.Index.repo.content.ContentJpaRepository;
 import br.com.pedroxsqueiroz.Index.repo.content.ContentMapper;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +23,16 @@ public class ConceptRepositoryAdapter implements ConceptRepositoryPort {
     private final ConceptJpaRepository conceptRepo;
     private final ConceptRelationJpaRepository relationRepo;
     private final ContentJpaRepository contentRepo;
+    private final ContentChunckJpaRepository chunckRepo;
 
     public ConceptRepositoryAdapter(ConceptJpaRepository conceptRepo,
                                     ConceptRelationJpaRepository relationRepo,
-                                    ContentJpaRepository contentRepo) {
+                                    ContentJpaRepository contentRepo,
+                                    ContentChunckJpaRepository chunckRepo) {
         this.conceptRepo = conceptRepo;
         this.relationRepo = relationRepo;
         this.contentRepo = contentRepo;
+        this.chunckRepo = chunckRepo;
     }
 
     @Override
@@ -61,7 +65,16 @@ public class ConceptRepositoryAdapter implements ConceptRepositoryPort {
     public Concept save(Concept concept) {
         ConceptEntity entity = ConceptMapper.toEntity(concept);
         entity.setId(concept.getId() != null ? concept.getId() : UUID.randomUUID().toString());
-        return ConceptMapper.toDomain(conceptRepo.save(entity));
+        ConceptEntity conceptEntitySaved = conceptRepo.save(entity);
+
+        concept.getChuncks().stream()
+                .map(ContentMapper::chunkToEntity)
+                .forEach( chunck -> {
+                    chunck.setConcept(conceptEntitySaved);
+                    chunckRepo.save(chunck);
+                });
+
+        return ConceptMapper.toDomain(conceptEntitySaved);
     }
 
     @Override
@@ -89,11 +102,14 @@ public class ConceptRepositoryAdapter implements ConceptRepositoryPort {
     @Override
     public List<Concept> list(Content content, Integer offset, Integer limit) {
         return contentRepo.findById(content.getId())
-                .map(contentEntity -> conceptRepo
-                        .findAllByChuncks_Content(contentEntity, PageRequest.of(offset, limit))
-                        .stream()
-                        .map(ConceptMapper::toDomain)
-                        .toList())
+                .map(contentEntity -> {
+                            return conceptRepo.findAllByChuncks_Content(
+                                    contentEntity,
+                                    PageRequest.of(offset, limit)
+                            ).stream()
+                            .map(ConceptMapper::toDomain)
+                            .toList();
+                })
                 .orElse(List.of());
     }
 }

@@ -7,7 +7,7 @@ export default class ContentChunckDto{
         start: number,
         end: number,
         chunckContent: string,
-        content: ContentDto
+        content: ContentDto|null
 
     ){
         this.id = id;
@@ -21,5 +21,5 @@ export default class ContentChunckDto{
     start: number;
     end: number;
     chunckContent: string;    
-    content: ContentDto;
+    content: ContentDto|null;
 }

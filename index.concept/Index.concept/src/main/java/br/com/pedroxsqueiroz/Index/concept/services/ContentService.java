@@ -120,8 +120,8 @@ public class ContentService {
         return contentRepository.findAll(offset, limit);
     }
 
-    public List<ContentChunck> getContentChunck(Content savedContent, int startPage, int endPage) {
-        return contentRepository.findContentChunckOfContentBetweenPages(savedContent, startPage, endPage);
+    public List<ContentChunck> getContentChunck(Content content, int startPage, int endPage) {
+        return contentRepository.findContentChunckOfContentBetweenPages(content, startPage, endPage);
     }
 
     public Content getContent(String contentId) {

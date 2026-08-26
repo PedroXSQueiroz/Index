@@ -17,9 +17,8 @@ export default function ContentContainer(props){
         let contentService:ContentService = new ContentService();
         let contentId = await contentService.submitPlainText(textAreaContentRef.current.value);
         await contentService.processEmbeddingsOfContent(contentId);
-        contentService.generateConceptsOfContent(contentId);
+        await contentService.generateConceptsOfContent(contentId);
         
-
         navigate(`/concepts?content=${contentId}`);
     }
     

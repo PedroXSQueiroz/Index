@@ -18,21 +18,12 @@ export default function ConceptsPage(){
     
     let contentService:ContentService = new ContentService();
     let contentIds:string[]|null = queryParams.getAll('content');
-    
-    let fetchConceptsOfContents = new Promise( async (resolve, reject) => {
-        
-        let concepts:ConceptDto[] = [];
 
-        for(let contentId of contentIds)
-        {
-            let conceptsOfContent:ConceptDto[] = await contentService.getConceptsOfContent(contentId);
-            concepts = concepts.concat( conceptsOfContent );
-        }
+    //`getAll` devolve um array novo a cada render, entao a dependencia do effect
+    //precisa ser um primitivo estavel — do contrario o effect roda em todo ciclo.
+    let contentIdsKey:string = contentIds.join(',');
 
-        resolve(concepts);
-    });
-    
-    let selectMostRecentContent = (concepts: ConceptDto[]) => 
+    let selectMostRecentContent = (concepts: ConceptDto[]) =>
     {
         //SORT ALL CHUNKS OF EACH CONCEPT
         concepts.forEach( c => 
@@ -55,23 +46,54 @@ export default function ConceptsPage(){
     }
 
     //FIXME: PROVISORY LOGIC TO GET ALL CONCEPTS
-    //MAYBE USE GRAPHQL?    
-    if(contentIds){
-        
+    //MAYBE USE GRAPHQL?
+    useEffect(() => {
+
+        if(!contentIds){
+            return;
+        }
+
+        //Descarta o resultado quando o effect e desmontado antes da resposta chegar
+        //(troca de `?content=` e duplo-mount do StrictMode em dev).
+        let cancelled:boolean = false;
+
+        let fetchConceptsOfContents = new Promise( async (resolve, reject) => {
+
+            let concepts:ConceptDto[] = [];
+
+            for(let contentId of contentIds)
+            {
+                let conceptsOfContent:ConceptDto[] = await contentService.getConceptsOfContent(contentId);
+                concepts = concepts.concat( conceptsOfContent );
+            }
+
+            resolve(concepts);
+        });
+
         Promise.all([
             fetchConceptsOfContents
         ]).then( async allConcepts => {
-            
+
+            if(cancelled){
+                return;
+            }
+
             let concepts:ConceptDto[] = allConcepts.reduce((aggr, current) => aggr.concat(current), []);
             let mostRecentContentId:string = selectMostRecentContent(concepts);
             let chuncks:ContentChunckDto[] = await contentService.getChuncksOfContent(mostRecentContentId);
-    
+
+            if(cancelled){
+                return;
+            }
+
             setConceptsState(concepts);
             setChuncksOfCurrentContent(chuncks);
-    
+
         });
 
-    }
+        return () => { cancelled = true; };
+
+    }, [contentIdsKey]);
 
     let existsConcepts = conceptsState && conceptsState.length > 0;
 

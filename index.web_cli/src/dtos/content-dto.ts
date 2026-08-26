@@ -5,6 +5,7 @@ export default class ContentDto{
         name: string,
         description: string,
         type: string,
+        uploadDate: Date = new Date()
     ){
         this.id = id;
         this.name = name;
