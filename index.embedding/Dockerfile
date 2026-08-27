@@ -28,6 +28,14 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM; \
 AutoTokenizer.from_pretrained('csebuetnlp/mT5_multilingual_XLSum'); \
 AutoModelForSeq2SeqLM.from_pretrained('csebuetnlp/mT5_multilingual_XLSum')"
 
+# Pré-baixa o PTT5 fine-tuned para sumarização em PT-BR, usado na geração de nome
+# de conceito (~900 MB). O tokenizer vem do vocabulário português da base da
+# Unicamp, não do repositório do modelo.
+RUN python -c "\
+from transformers import T5Tokenizer, T5ForConditionalGeneration; \
+T5Tokenizer.from_pretrained('unicamp-dl/ptt5-base-portuguese-vocab'); \
+T5ForConditionalGeneration.from_pretrained('recogna-nlp/ptt5-base-summ-xlsum')"
+
 COPY app.py .
 
 EXPOSE 5000
